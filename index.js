@@ -102,40 +102,47 @@ function randomNum(minNum, maxNum) {
 // 获取矩阵大小
 function getMatrixSize() {
     /* 
-    rmax：每行中存在数据
-    cmax：每列中存在数据
+    rmax：每行位置存在有效数据且最远的单元格
+    cmax：每列位置存在有效数据且最远的单元格
     */
     var rmax = [];
     var cmax = [];
-    // 遍历数组，获取rmax
+
+    // 判断每行位置存在有效数据且最远的单元格
     for (var i = 0; i < 10; i++) {
-        for (var j = 0; j < 10; j++) {
-            if (nlist[i][10 - j - 1] > 0) {
-                rmax[i] = 10 - j;
+        for (var j = 9; j >= 0; j--) {
+            if (nlist[i][j] <= 0) {
+                continue;
+            } else {
+                rmax[i] = j;
+                break;
             }
         }
     }
-    // 获取cmax
+    // 判断每列位置存在有效数据且最远的单元格
     for (var i = 0; i < 10; i++) {
-        for (var j = 0; j < 10; j++) {
-            if (nlist[j][10 - j - 1] > 0) {
-                cmax[i] = 10 - j;
+        for (var j = 9; j >= 0; j--) {
+            if (nlist[j][i] <= 0) {
+                continue;
+            } else {
+                cmax[i] = j;
+                break;
             }
         }
     }
-    // 遍历rmax,cmax,返回最大值
+    // 遍历rmax,cmax取最大值max作为函数返回值
     var max = 0;
-    for (var i = 0; i < rmax.length; i++) {
+    for (var i = 0; i < 10; i++) {
         if (rmax[i] > max) {
             max = rmax[i];
         }
     }
-    for (var i = 0; i < cmax.length; i++) {
+    for (var i = 0; i < 10; i++) {
         if (cmax[i] > max) {
             max = cmax[i];
         }
     }
-    return max+1;
+    return max + 1;
 }
 
 // 获取矩阵内所有数据并存入数组nlist
@@ -145,4 +152,10 @@ function getMatrixData() {
             nlist[i][j] = $("#" + llist[i * 10 + j]).val();
         }
     }
+}
+
+function matrixSizeSnackbar(){
+    mdui.snackbar({
+        message: "当前矩阵大小为："+getMatrixSize()+"x"+getMatrixSize()
+      });
 }
