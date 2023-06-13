@@ -1,9 +1,11 @@
 /* 
-        clist:前十个字母列表
-        llist：前十个字母排列组合后的列表
-        */
+clist:前十个字母列表
+llist：前十个字母排列组合后的列表
+nlist：获取单元格内所有数据组合而成的二维数组
+ */
 var clist = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 var llist = [];
+var nlist = [[], [], [], [], [], [], [], [], [], []];
 // 通过clist，初始化llist并赋值
 var temp = 0;
 for (var i = 0; i < 10; i++) {
@@ -56,6 +58,8 @@ function setRandomNum() {
     }
     // 重置AA,BB,CC...单元格的数值
     lockTextBox();
+    // 更新nlist数组
+    getMatrixData();
 }
 
 // 锁定AA,BB,CC...单元格并将数字置为0
@@ -72,9 +76,12 @@ function lockTextBox() {
     }
 }
 
-// 同步变化单元格（例如AB与BA）
+// 当数据单元格内容发生变化时
 $("input").not("#randNum").on("input propertychange", function () {
+    // 同步变化单元格（例如AB与BA） 
     $("#" + $(this).attr("id")[1] + $(this).attr("id")[0]).val($(this).val());
+    // 获取矩阵内所有数据并存入数组nlist
+    getMatrixData();
 });
 
 //生成从minNum到maxNum的随机数
@@ -89,5 +96,53 @@ function randomNum(minNum, maxNum) {
         default:
             return 0;
             break;
+    }
+}
+
+// 获取矩阵大小
+function getMatrixSize() {
+    /* 
+    rmax：每行中存在数据
+    cmax：每列中存在数据
+    */
+    var rmax = [];
+    var cmax = [];
+    // 遍历数组，获取rmax
+    for (var i = 0; i < 10; i++) {
+        for (var j = 0; j < 10; j++) {
+            if (nlist[i][10 - j - 1] > 0) {
+                rmax[i] = 10 - j;
+            }
+        }
+    }
+    // 获取cmax
+    for (var i = 0; i < 10; i++) {
+        for (var j = 0; j < 10; j++) {
+            if (nlist[j][10 - j - 1] > 0) {
+                cmax[i] = 10 - j;
+            }
+        }
+    }
+    // 遍历rmax,cmax,返回最大值
+    var max = 0;
+    for (var i = 0; i < rmax.length; i++) {
+        if (rmax[i] > max) {
+            max = rmax[i];
+        }
+    }
+    for (var i = 0; i < cmax.length; i++) {
+        if (cmax[i] > max) {
+            max = cmax[i];
+        }
+    }
+    return max+1;
+}
+
+// 获取矩阵内所有数据并存入数组nlist
+function getMatrixData() {
+    for (var i = 0; i < 10; i++) {
+        for (var j = 0; j < 10; j++) {
+            nlist[i][j] = $("#" + llist[i * 10 + j]).val();
+        }
     }
 }
