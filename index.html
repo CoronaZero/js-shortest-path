@@ -44,18 +44,18 @@
 
     <div class="mdui-container-fluid">
         <!-- 可扩展面板 -->
-        <div class="mdui-panel mdui-color-theme-accent mdui-shadow02" mdui-panel>
+        <div class="mdui-panel mdui-color-theme-accent mdui-shadow-2" mdui-panel>
 
             <!-- 操作按钮面板 -->
             <div class="mdui-panel-item mdui-panel-item-open">
                 <div class="mdui-panel-item-header">矩阵控制面板</div>
                 <div class="mdui-panel-item-body">
                     <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
-                        href='javascript:resetList();'>将所有元素重置为0</a>
+                        href='javascript:resetList();'>将所有元素重置为-1</a>
                     <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
                         href='javascript:matrixSizeSnackbar();'>检查矩阵大小</a>
                     <br>
-                    <div class="mdui-typo" style="height: 16px;">
+                    <div class="mdui-typo mdui-shadow-1" style="height: 16px;">
                         <hr />
                     </div>
                     <div>将前<input id="randNum" type="number" value="5">行/列的值取0~20的
@@ -63,177 +63,211 @@
                             href='javascript:setRandomNum();'>随机数</a>
                         <div class="mdui-text-color-green">请注意：这将会先重置现有的所有数据</div>
                     </div>
+                    <div class="mdui-typo mdui-shadow-1" style="height: 16px;">
+                        <hr />
+                    </div>
+                    <div>
+                        计算从
+                        <select class="mdui-select mdui-shadow-3" id="from">
+                            <option value="A" selected>A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                        </select>
+                        到
+                        <select class="mdui-select mdui-shadow-3" id="to">
+                            <option value="A">A</option>
+                            <option value="B" selected>B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                        </select>
+                        两点间的最短路径
+                        <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                            href='javascript:setRandomPoint();'>随机取点</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 邻接矩阵的输入面板 -->
-        <div class="mdui-panel-item mdui-panel-item-open">
-            <div class="mdui-panel-item-header">邻接矩阵</div>
-            <div class="mdui-panel-item-body">
-                <div class="mdui-typo">
-                    <hr />
-                </div>
-                <p class="mdui-text-color-red">单元格内数字小于1，则说明两点间不连通</p>
-                <!-- 表格：用于数据的输入 -->
-                <div class="mdui-table-fluid">
-                    <table class="mdui-table">
-                        <!-- 表头 -->
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>A</th>
-                                <th>B</th>
-                                <th>C</th>
-                                <th>D</th>
-                                <th>E</th>
-                                <th>F</th>
-                                <th>G</th>
-                                <th>H</th>
-                                <th>I</th>
-                                <th>J</th>
-                            </tr>
-                        </thead>
-                        <!-- 主表 -->
-                        <tbody>
 
-                            <tr>
-                                <td>A</td>
-                                <td><input type="number" id="AA"></td>
-                                <td><input type="number" id="AB"></td>
-                                <td><input type="number" id="AC"></td>
-                                <td><input type="number" id="AD"></td>
-                                <td><input type="number" id="AE"></td>
-                                <td><input type="number" id="AF"></td>
-                                <td><input type="number" id="AG"></td>
-                                <td><input type="number" id="AH"></td>
-                                <td><input type="number" id="AI"></td>
-                                <td><input type="number" id="AJ"></td>
-                            </tr>
-                            <tr>
-                                <td>B</td>
-                                <td><input type="number" id="BA"></td>
-                                <td><input type="number" id="BB"></td>
-                                <td><input type="number" id="BC"></td>
-                                <td><input type="number" id="BD"></td>
-                                <td><input type="number" id="BE"></td>
-                                <td><input type="number" id="BF"></td>
-                                <td><input type="number" id="BG"></td>
-                                <td><input type="number" id="BH"></td>
-                                <td><input type="number" id="BI"></td>
-                                <td><input type="number" id="BJ"></td>
-                            </tr>
-                            <tr>
-                                <td>C</td>
-                                <td><input type="number" id="CA"></td>
-                                <td><input type="number" id="CB"></td>
-                                <td><input type="number" id="CC"></td>
-                                <td><input type="number" id="CD"></td>
-                                <td><input type="number" id="CE"></td>
-                                <td><input type="number" id="CF"></td>
-                                <td><input type="number" id="CG"></td>
-                                <td><input type="number" id="CH"></td>
-                                <td><input type="number" id="CI"></td>
-                                <td><input type="number" id="CJ"></td>
-                            </tr>
-                            <tr>
-                                <td>D</td>
-                                <td><input type="number" id="DA"></td>
-                                <td><input type="number" id="DB"></td>
-                                <td><input type="number" id="DC"></td>
-                                <td><input type="number" id="DD"></td>
-                                <td><input type="number" id="DE"></td>
-                                <td><input type="number" id="DF"></td>
-                                <td><input type="number" id="DG"></td>
-                                <td><input type="number" id="DH"></td>
-                                <td><input type="number" id="DI"></td>
-                                <td><input type="number" id="DJ"></td>
-                            </tr>
-                            <tr>
-                                <td>E</td>
-                                <td><input type="number" id="EA"></td>
-                                <td><input type="number" id="EB"></td>
-                                <td><input type="number" id="EC"></td>
-                                <td><input type="number" id="ED"></td>
-                                <td><input type="number" id="EE"></td>
-                                <td><input type="number" id="EF"></td>
-                                <td><input type="number" id="EG"></td>
-                                <td><input type="number" id="EH"></td>
-                                <td><input type="number" id="EI"></td>
-                                <td><input type="number" id="EJ"></td>
-                            </tr>
-                            <tr>
-                                <td>F</td>
-                                <td><input type="number" id="FA"></td>
-                                <td><input type="number" id="FB"></td>
-                                <td><input type="number" id="FC"></td>
-                                <td><input type="number" id="FD"></td>
-                                <td><input type="number" id="FE"></td>
-                                <td><input type="number" id="FF"></td>
-                                <td><input type="number" id="FG"></td>
-                                <td><input type="number" id="FH"></td>
-                                <td><input type="number" id="FI"></td>
-                                <td><input type="number" id="FJ"></td>
-                            </tr>
-                            <tr>
-                                <td>G</td>
-                                <td><input type="number" id="GA"></td>
-                                <td><input type="number" id="GB"></td>
-                                <td><input type="number" id="GC"></td>
-                                <td><input type="number" id="GD"></td>
-                                <td><input type="number" id="GE"></td>
-                                <td><input type="number" id="GF"></td>
-                                <td><input type="number" id="GG"></td>
-                                <td><input type="number" id="GH"></td>
-                                <td><input type="number" id="GI"></td>
-                                <td><input type="number" id="GJ"></td>
-                            </tr>
-                            <tr>
-                                <td>H</td>
-                                <td><input type="number" id="HA"></td>
-                                <td><input type="number" id="HB"></td>
-                                <td><input type="number" id="HC"></td>
-                                <td><input type="number" id="HD"></td>
-                                <td><input type="number" id="HE"></td>
-                                <td><input type="number" id="HF"></td>
-                                <td><input type="number" id="HG"></td>
-                                <td><input type="number" id="HH"></td>
-                                <td><input type="number" id="HI"></td>
-                                <td><input type="number" id="HJ"></td>
-                            </tr>
-                            <tr>
-                                <td>I</td>
-                                <td><input type="number" id="IA"></td>
-                                <td><input type="number" id="IB"></td>
-                                <td><input type="number" id="IC"></td>
-                                <td><input type="number" id="ID"></td>
-                                <td><input type="number" id="IE"></td>
-                                <td><input type="number" id="IF"></td>
-                                <td><input type="number" id="IG"></td>
-                                <td><input type="number" id="IH"></td>
-                                <td><input type="number" id="II"></td>
-                                <td><input type="number" id="IJ"></td>
-                            </tr>
-                            <tr>
-                                <td>J</td>
-                                <td><input type="number" id="JA"></td>
-                                <td><input type="number" id="JB"></td>
-                                <td><input type="number" id="JC"></td>
-                                <td><input type="number" id="JD"></td>
-                                <td><input type="number" id="JE"></td>
-                                <td><input type="number" id="JF"></td>
-                                <td><input type="number" id="JG"></td>
-                                <td><input type="number" id="JH"></td>
-                                <td><input type="number" id="JI"></td>
-                                <td><input type="number" id="JJ"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- 邻接矩阵的输入面板 -->
+            <div class="mdui-panel-item mdui-panel-item-open">
+                <div class="mdui-panel-item-header">邻接矩阵</div>
+                <div class="mdui-panel-item-body">
+                    <div class="mdui-typo">
+                        <hr />
+                    </div>
+                    <p class="mdui-text-color-red">单元格内数字小于0，则说明两点间不连通</p>
+                    <!-- 表格：用于数据的输入 -->
+                    <div class="mdui-table-fluid">
+                        <table class="mdui-table">
+                            <!-- 表头 -->
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                    <th>C</th>
+                                    <th>D</th>
+                                    <th>E</th>
+                                    <th>F</th>
+                                    <th>G</th>
+                                    <th>H</th>
+                                    <th>I</th>
+                                    <th>J</th>
+                                </tr>
+                            </thead>
+                            <!-- 主表 -->
+                            <tbody>
+
+                                <tr>
+                                    <td>A</td>
+                                    <td><input type="number" id="AA"></td>
+                                    <td><input type="number" id="AB"></td>
+                                    <td><input type="number" id="AC"></td>
+                                    <td><input type="number" id="AD"></td>
+                                    <td><input type="number" id="AE"></td>
+                                    <td><input type="number" id="AF"></td>
+                                    <td><input type="number" id="AG"></td>
+                                    <td><input type="number" id="AH"></td>
+                                    <td><input type="number" id="AI"></td>
+                                    <td><input type="number" id="AJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>B</td>
+                                    <td><input type="number" id="BA"></td>
+                                    <td><input type="number" id="BB"></td>
+                                    <td><input type="number" id="BC"></td>
+                                    <td><input type="number" id="BD"></td>
+                                    <td><input type="number" id="BE"></td>
+                                    <td><input type="number" id="BF"></td>
+                                    <td><input type="number" id="BG"></td>
+                                    <td><input type="number" id="BH"></td>
+                                    <td><input type="number" id="BI"></td>
+                                    <td><input type="number" id="BJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>C</td>
+                                    <td><input type="number" id="CA"></td>
+                                    <td><input type="number" id="CB"></td>
+                                    <td><input type="number" id="CC"></td>
+                                    <td><input type="number" id="CD"></td>
+                                    <td><input type="number" id="CE"></td>
+                                    <td><input type="number" id="CF"></td>
+                                    <td><input type="number" id="CG"></td>
+                                    <td><input type="number" id="CH"></td>
+                                    <td><input type="number" id="CI"></td>
+                                    <td><input type="number" id="CJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>D</td>
+                                    <td><input type="number" id="DA"></td>
+                                    <td><input type="number" id="DB"></td>
+                                    <td><input type="number" id="DC"></td>
+                                    <td><input type="number" id="DD"></td>
+                                    <td><input type="number" id="DE"></td>
+                                    <td><input type="number" id="DF"></td>
+                                    <td><input type="number" id="DG"></td>
+                                    <td><input type="number" id="DH"></td>
+                                    <td><input type="number" id="DI"></td>
+                                    <td><input type="number" id="DJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>E</td>
+                                    <td><input type="number" id="EA"></td>
+                                    <td><input type="number" id="EB"></td>
+                                    <td><input type="number" id="EC"></td>
+                                    <td><input type="number" id="ED"></td>
+                                    <td><input type="number" id="EE"></td>
+                                    <td><input type="number" id="EF"></td>
+                                    <td><input type="number" id="EG"></td>
+                                    <td><input type="number" id="EH"></td>
+                                    <td><input type="number" id="EI"></td>
+                                    <td><input type="number" id="EJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>F</td>
+                                    <td><input type="number" id="FA"></td>
+                                    <td><input type="number" id="FB"></td>
+                                    <td><input type="number" id="FC"></td>
+                                    <td><input type="number" id="FD"></td>
+                                    <td><input type="number" id="FE"></td>
+                                    <td><input type="number" id="FF"></td>
+                                    <td><input type="number" id="FG"></td>
+                                    <td><input type="number" id="FH"></td>
+                                    <td><input type="number" id="FI"></td>
+                                    <td><input type="number" id="FJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>G</td>
+                                    <td><input type="number" id="GA"></td>
+                                    <td><input type="number" id="GB"></td>
+                                    <td><input type="number" id="GC"></td>
+                                    <td><input type="number" id="GD"></td>
+                                    <td><input type="number" id="GE"></td>
+                                    <td><input type="number" id="GF"></td>
+                                    <td><input type="number" id="GG"></td>
+                                    <td><input type="number" id="GH"></td>
+                                    <td><input type="number" id="GI"></td>
+                                    <td><input type="number" id="GJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>H</td>
+                                    <td><input type="number" id="HA"></td>
+                                    <td><input type="number" id="HB"></td>
+                                    <td><input type="number" id="HC"></td>
+                                    <td><input type="number" id="HD"></td>
+                                    <td><input type="number" id="HE"></td>
+                                    <td><input type="number" id="HF"></td>
+                                    <td><input type="number" id="HG"></td>
+                                    <td><input type="number" id="HH"></td>
+                                    <td><input type="number" id="HI"></td>
+                                    <td><input type="number" id="HJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>I</td>
+                                    <td><input type="number" id="IA"></td>
+                                    <td><input type="number" id="IB"></td>
+                                    <td><input type="number" id="IC"></td>
+                                    <td><input type="number" id="ID"></td>
+                                    <td><input type="number" id="IE"></td>
+                                    <td><input type="number" id="IF"></td>
+                                    <td><input type="number" id="IG"></td>
+                                    <td><input type="number" id="IH"></td>
+                                    <td><input type="number" id="II"></td>
+                                    <td><input type="number" id="IJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>J</td>
+                                    <td><input type="number" id="JA"></td>
+                                    <td><input type="number" id="JB"></td>
+                                    <td><input type="number" id="JC"></td>
+                                    <td><input type="number" id="JD"></td>
+                                    <td><input type="number" id="JE"></td>
+                                    <td><input type="number" id="JF"></td>
+                                    <td><input type="number" id="JG"></td>
+                                    <td><input type="number" id="JH"></td>
+                                    <td><input type="number" id="JI"></td>
+                                    <td><input type="number" id="JJ"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
 
     </div>
     <!-- JavaScript -->
