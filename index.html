@@ -11,6 +11,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="/MDUI/css/mdui.min.css" />
     <style>
+        /* 修改输入框宽度 */
         input {
             width: 64px;
         }
@@ -44,12 +45,13 @@
 
     <div class="mdui-container-fluid">
         <!-- 可扩展面板 -->
-        <div class="mdui-panel mdui-color-theme-accent mdui-shadow-2" mdui-panel>
+        <div class="mdui-panel mdui-color-theme-accent mdui-shadow-5 mdui-panel-gapless mdui-panel-popout" mdui-panel>
 
             <!-- 操作按钮面板 -->
             <div class="mdui-panel-item mdui-panel-item-open">
-                <div class="mdui-panel-item-header">矩阵控制面板</div>
+                <div class="mdui-panel-item-header"><h3>矩阵控制面板</h3></div>
                 <div class="mdui-panel-item-body">
+                    <!-- 操作按钮 -->
                     <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
                         href='javascript:resetList();'>将所有元素重置为-1</a>
                     <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
@@ -58,6 +60,7 @@
                     <div class="mdui-typo mdui-shadow-1" style="height: 16px;">
                         <hr />
                     </div>
+                    <!-- 随机数填充 -->
                     <div>将前<input id="randNum" type="number" value="5">行/列的值取0~20的
                         <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
                             href='javascript:setRandomNum();'>随机数</a>
@@ -66,6 +69,7 @@
                     <div class="mdui-typo mdui-shadow-1" style="height: 16px;">
                         <hr />
                     </div>
+                    <!-- 取点用于计算 -->
                     <div>
                         计算从
                         <select class="mdui-select mdui-shadow-3" id="from">
@@ -103,7 +107,7 @@
 
             <!-- 邻接矩阵的输入面板 -->
             <div class="mdui-panel-item mdui-panel-item-open">
-                <div class="mdui-panel-item-header">邻接矩阵</div>
+                <div class="mdui-panel-item-header"><h3>邻接矩阵输入面板</h3></div>
                 <div class="mdui-panel-item-body">
                     <div class="mdui-typo">
                         <hr />
@@ -273,7 +277,6 @@
     <!-- JavaScript -->
     <script src="/MDUI/js/mdui.min.js"></script>
     <script src='/jquery-3.6.4.min.js'></script>
-
     <script src="index.js"></script>
 </body>
 

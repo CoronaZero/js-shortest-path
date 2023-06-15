@@ -11,6 +11,7 @@ var llist = [];
 var nlist = [[], [], [], [], [], [], [], [], [], []];
 var from = "A";
 var to = "B";
+
 // 通过clist，初始化llist并赋值
 var temp = 0;
 for (var i = 0; i < 10; i++) {
@@ -43,7 +44,7 @@ function setRandomNum() {
     rc：从文本框获取的要进行随机填充的行/列数
     tlist：根据rc所生成的需要填充的单元格列表
     */
-    rc = $("#randNum").val();
+    var rc = $("#randNum").val();
     // 判断rc是否符合要求
     if (rc < 1 || rc > 10) {
         alert("错误：所输入的值不能小于1或大于10！");
