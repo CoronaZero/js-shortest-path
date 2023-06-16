@@ -2,37 +2,46 @@
 clist:前十个字母列表
 llist：前十个字母排列组合后的列表
 nlist：获取单元格内所有数据组合而成的二维数组
+rlist：计算结果二维数组
 from：起点
 to：终点
 */
 var clist = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-var llist = [];
+var llist = [[], [], [], [], [], [], [], [], [], []];
 var nlist = [[], [], [], [], [], [], [], [], [], []];
+var rlist = [[], [], [], [], [], [], [], [], [], []];
 var from = "A";
 var to = "B";
 
-// 通过clist，初始化llist并赋值
-for (let i = 0,temp = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-        llist[temp] = clist[i] + clist[j];
-        temp++;
-    }
-}
-
-
+// 文档加载完成后执行
 $(document).ready(function () {
-    // 文档加载完成后，立即重置列表
+    // 通过clist，初始化llist并赋值
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            llist[i][j] = clist[i] + clist[j];
+        }
+    }
+
+    // 重置nlist列表
     resetList();
+    // 加载一言
+    reloadHitokoto();
 });
 
 // 重置列表函数
 function resetList() {
-    // 将所有文本框（除随机数文本框）的内容置为-1
-    $("input").not("#randNum").val('-1');
+    // 将所有文本框（除随机数文本框）的内容置为defaultNum
+    $("input").not("#randNum").val(defaultNum);
     // 锁定AA,BB,CC...单元格
     lockTextBox();
     // 重置nlist
     getMatrixData();
+    // 重置rlist
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            rlist[i][j] = defaultNum;
+        }
+    }
 }
 
 // 随机填充数据函数
@@ -67,15 +76,15 @@ function setRandomNum() {
     getMatrixData();
 }
 
-// 锁定AA,BB,CC...单元格并将数字置为0
+// 锁定AA,BB,CC...单元格并将数字置为defaultNum
 function lockTextBox() {
-    for (let i = 0, temp = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             if (i == j) {
                 // 设置单元格属性，禁用编辑
                 $("#" + clist[i] + clist[j]).attr("disabled", "disabled");
                 // 设置单元格值
-                $("#" + clist[i] + clist[j]).val("-1");
+                $("#" + clist[i] + clist[j]).val(defaultNum);
             }
         }
     }
@@ -154,7 +163,15 @@ function getMatrixSize() {
 function getMatrixData() {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
-            nlist[i][j] = $("#" + llist[i * 10 + j]).val();
+
+            // 判断当前单元格是否为数字
+            if (typeof $("#" + llist[i * 10 + j]).val() == 'number') {
+                // 是，则直接写入nlist
+                nlist[i][j] = $("#" + llist[i * 10 + j]).val();
+            } else {
+                // 不是，则写入defaultNum
+                nlist[i][j] = defaultNum;
+            }
         }
     }
 }
@@ -204,3 +221,36 @@ function setRandomPoint() {
         to = $("#to").val();
     }
 }
+
+// 重载右上角一言
+function reloadHitokoto() {
+    $.ajax({
+        url: "https://v1.hitokoto.cn/?encode=text",
+        success: function (result) {
+            $("#hitokoto").html(result);
+        }
+    });
+}
+
+// 当点击一言标签时，重载一言
+$("#hitokoto").click(function () {
+    reloadHitokoto();
+});
+
+// 计算结果展示
+function showResult() {
+    // 将rlist中的数据显示于结果面板
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            // 若某一元素为无穷大
+            if (rlist[i][j] == Infinity) {
+                // 将内容设置为INF
+                $("#r" + llist[i][j]).text("INF");
+            } else {
+                // 将内容设置为对应数字
+                $("#r" + llist[i][j]).text(rlist[i][j]);
+            }
+        }
+    }
+}
+
