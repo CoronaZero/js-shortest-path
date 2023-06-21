@@ -30,5 +30,38 @@ function calculate() {
             }
         }
     }
-    showResult();
+    
+    // 将rlist中的数据显示于结果面板
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            // 若某一元素为无穷大
+            if (rlist[i][j] == Infinity) {
+                // 将内容设置为INF
+                $("#r" + llist[i][j]).text("INF");
+            } else {
+                // 将内容设置为对应数字
+                $("#r" + llist[i][j]).text(rlist[i][j]);
+            }
+        }
+    }
 }
+
+// 双击文本框，将其内容变为无穷大
+$("input").not("#randNum").dblclick(function () {
+    $(this).val(Infinity);
+    getMatrixData();
+});
+
+// 当下拉选择框内容发生变动时
+$("select").change(function () {
+    // 判断两个下拉选择框中的值是否一致，如果一致则弹出警告
+    if ($("#from").val() == $("#to").val()) {
+        alert("错误：需要计算的两点不能为同一点，将尝试随机取点！");
+    } else {
+        // 若不一致，则随机取点
+        setRandomPoint();
+    }
+    // 设置全局变量from、to的值
+    from = $("#from").val();
+    to = $("#to").val();
+});

@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+    <meta name="renderer" content="webkit" />
+    <meta name="force-rendering" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/MDUI/css/mdui.min.css" />
+    <style>
+        /* 修改输入框宽度 */
+        input {
+            width: 64px;
+        }
+    </style>
+
+    <title>弗洛伊德：最短路径求解</title>
+</head>
+
+<body class="mdui-theme-primary-indigo mdui-theme-accent-red">
+
+    <!-- 顶部应用栏 -->
+    <div class="mdui-appbar mdui-appbar-fixed">
+        <div class="mdui-toolbar mdui-color-theme">
+
+            <!-- 主标题 -->
+            <div class="mdui-typo-headline">最短路径求解：弗洛伊德</div>
+            <!-- 副标题，在小屏上不显示 -->
+            <div class="mdui-typo-title mdui-hidden-md-down">
+                小组成员：马骁宝、妥文强
+            </div>
+            <!-- 元素向两边推 -->
+            <div class="mdui-toolbar-spacer"></div>
+            <p id="hitokoto">
+                温柔而坚定。
+            </p>
+        </div>
+    </div>
+
+    <!-- 应用栏以下 -->
+
+    <!-- 下移75像素 -->
+    <div class="mdui-typo" style="height: 75px;">
+        <hr />
+    </div>
+
+    <div class="mdui-container-fluid">
+        <!-- 可扩展面板 -->
+        <div class="mdui-panel mdui-color-theme-accent mdui-panel-gapless mdui-panel-popout" mdui-panel>
+
+            <!-- 操作按钮面板 -->
+            <div class="mdui-panel-item mdui-panel-item-open  mdui-shadow-5">
+                <div class="mdui-panel-item-header">
+                    <h3>矩阵控制面板</h3>
+                </div>
+                <div class="mdui-panel-item-body">
+                    <!-- 操作按钮 -->
+                    <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                        href='javascript:resetList();'>将所有元素重置为INF</a>
+                    <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                        href='javascript:matrixSizeSnackbar();'>检查矩阵大小</a>
+                    <br>
+                    <div style="height: 18px;">
+                        <hr>
+                    </div>
+                    <!-- 随机数填充 -->
+                    <div>将前<input id="randNum" type="number" value="5">行/列的值取1~20或INF的
+                        <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                            href='javascript:setRandomNum();'>随机数</a>
+                        <div class="mdui-text-color-green">请注意：这将会先重置现有的所有数据</div>
+                    </div>
+                    <div style="height: 18px;">
+                        <hr>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 邻接矩阵的输入面板 -->
+            <div class="mdui-panel-item mdui-panel-item-open  mdui-shadow-5">
+                <div class="mdui-panel-item-header">
+                    <h3>邻接矩阵输入面板</h3>
+                </div>
+                <div class="mdui-panel-item-body">
+                    <div class="mdui-typo">
+                        <hr />
+                    </div>
+                    <p class="mdui-text-color-red">若输入的内容不为数字，则单元格位置的元素为无穷大，双击单元格可将单元格内容快速写为无穷大</p>
+                    <!-- 表格：用于数据的输入 -->
+                    <div class="mdui-table-fluid">
+                        <table class="mdui-table">
+                            <!-- 表头 -->
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                    <th>C</th>
+                                    <th>D</th>
+                                    <th>E</th>
+                                    <th>F</th>
+                                    <th>G</th>
+                                    <th>H</th>
+                                    <th>I</th>
+                                    <th>J</th>
+                                </tr>
+                            </thead>
+                            <!-- 主表 -->
+                            <tbody>
+
+                                <tr>
+                                    <td>A</td>
+                                    <td><input type="text" id="AA"></td>
+                                    <td><input type="text" id="AB"></td>
+                                    <td><input type="text" id="AC"></td>
+                                    <td><input type="text" id="AD"></td>
+                                    <td><input type="text" id="AE"></td>
+                                    <td><input type="text" id="AF"></td>
+                                    <td><input type="text" id="AG"></td>
+                                    <td><input type="text" id="AH"></td>
+                                    <td><input type="text" id="AI"></td>
+                                    <td><input type="text" id="AJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>B</td>
+                                    <td><input type="text" id="BA"></td>
+                                    <td><input type="text" id="BB"></td>
+                                    <td><input type="text" id="BC"></td>
+                                    <td><input type="text" id="BD"></td>
+                                    <td><input type="text" id="BE"></td>
+                                    <td><input type="text" id="BF"></td>
+                                    <td><input type="text" id="BG"></td>
+                                    <td><input type="text" id="BH"></td>
+                                    <td><input type="text" id="BI"></td>
+                                    <td><input type="text" id="BJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>C</td>
+                                    <td><input type="text" id="CA"></td>
+                                    <td><input type="text" id="CB"></td>
+                                    <td><input type="text" id="CC"></td>
+                                    <td><input type="text" id="CD"></td>
+                                    <td><input type="text" id="CE"></td>
+                                    <td><input type="text" id="CF"></td>
+                                    <td><input type="text" id="CG"></td>
+                                    <td><input type="text" id="CH"></td>
+                                    <td><input type="text" id="CI"></td>
+                                    <td><input type="text" id="CJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>D</td>
+                                    <td><input type="text" id="DA"></td>
+                                    <td><input type="text" id="DB"></td>
+                                    <td><input type="text" id="DC"></td>
+                                    <td><input type="text" id="DD"></td>
+                                    <td><input type="text" id="DE"></td>
+                                    <td><input type="text" id="DF"></td>
+                                    <td><input type="text" id="DG"></td>
+                                    <td><input type="text" id="DH"></td>
+                                    <td><input type="text" id="DI"></td>
+                                    <td><input type="text" id="DJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>E</td>
+                                    <td><input type="text" id="EA"></td>
+                                    <td><input type="text" id="EB"></td>
+                                    <td><input type="text" id="EC"></td>
+                                    <td><input type="text" id="ED"></td>
+                                    <td><input type="text" id="EE"></td>
+                                    <td><input type="text" id="EF"></td>
+                                    <td><input type="text" id="EG"></td>
+                                    <td><input type="text" id="EH"></td>
+                                    <td><input type="text" id="EI"></td>
+                                    <td><input type="text" id="EJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>F</td>
+                                    <td><input type="text" id="FA"></td>
+                                    <td><input type="text" id="FB"></td>
+                                    <td><input type="text" id="FC"></td>
+                                    <td><input type="text" id="FD"></td>
+                                    <td><input type="text" id="FE"></td>
+                                    <td><input type="text" id="FF"></td>
+                                    <td><input type="text" id="FG"></td>
+                                    <td><input type="text" id="FH"></td>
+                                    <td><input type="text" id="FI"></td>
+                                    <td><input type="text" id="FJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>G</td>
+                                    <td><input type="text" id="GA"></td>
+                                    <td><input type="text" id="GB"></td>
+                                    <td><input type="text" id="GC"></td>
+                                    <td><input type="text" id="GD"></td>
+                                    <td><input type="text" id="GE"></td>
+                                    <td><input type="text" id="GF"></td>
+                                    <td><input type="text" id="GG"></td>
+                                    <td><input type="text" id="GH"></td>
+                                    <td><input type="text" id="GI"></td>
+                                    <td><input type="text" id="GJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>H</td>
+                                    <td><input type="text" id="HA"></td>
+                                    <td><input type="text" id="HB"></td>
+                                    <td><input type="text" id="HC"></td>
+                                    <td><input type="text" id="HD"></td>
+                                    <td><input type="text" id="HE"></td>
+                                    <td><input type="text" id="HF"></td>
+                                    <td><input type="text" id="HG"></td>
+                                    <td><input type="text" id="HH"></td>
+                                    <td><input type="text" id="HI"></td>
+                                    <td><input type="text" id="HJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>I</td>
+                                    <td><input type="text" id="IA"></td>
+                                    <td><input type="text" id="IB"></td>
+                                    <td><input type="text" id="IC"></td>
+                                    <td><input type="text" id="ID"></td>
+                                    <td><input type="text" id="IE"></td>
+                                    <td><input type="text" id="IF"></td>
+                                    <td><input type="text" id="IG"></td>
+                                    <td><input type="text" id="IH"></td>
+                                    <td><input type="text" id="II"></td>
+                                    <td><input type="text" id="IJ"></td>
+                                </tr>
+                                <tr>
+                                    <td>J</td>
+                                    <td><input type="text" id="JA"></td>
+                                    <td><input type="text" id="JB"></td>
+                                    <td><input type="text" id="JC"></td>
+                                    <td><input type="text" id="JD"></td>
+                                    <td><input type="text" id="JE"></td>
+                                    <td><input type="text" id="JF"></td>
+                                    <td><input type="text" id="JG"></td>
+                                    <td><input type="text" id="JH"></td>
+                                    <td><input type="text" id="JI"></td>
+                                    <td><input type="text" id="JJ"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- 计算结果显示面板 -->
+            <div class="mdui-panel-item mdui-panel-item-open  mdui-shadow-5">
+                <div class="mdui-panel-item-header">
+                    <h3 class="mdui-text-color-red">计算结果矩阵</h3>
+                </div>
+                <div class="mdui-panel-item-body">
+                    <div class="mdui-table-fluid">
+                        <table class="mdui-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                    <th>C</th>
+                                    <th>D</th>
+                                    <th>E</th>
+                                    <th>F</th>
+                                    <th>G</th>
+                                    <th>H</th>
+                                    <th>I</th>
+                                    <th>J</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>A</td>
+                                    <td>
+                                        <p id="rAA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rAB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rAC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rAD">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rAE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rAF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rAG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rAH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rAI">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rAJ">0</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>B</td>
+                                    <td>
+                                        <p id="rBA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rBB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rBC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rBD">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rBE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rBF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rBG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rBH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rBI">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rBJ">0</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>C</td>
+                                    <td>
+                                        <p id="rCA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rCB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rCC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rCD">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rCE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rCF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rCG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rCH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rCI">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rCJ">0</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>D</td>
+                                    <td>
+                                        <p id="rDA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rDB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rDC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rDD">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rDE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rDF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rDG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rDH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rDI">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rDJ">0</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>E</td>
+                                    <td>
+                                        <p id="rEA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rEB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rEC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rED">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rEE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rEF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rEG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rEH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rEI">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rEJ">0</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>F</td>
+                                    <td>
+                                        <p id="rFA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rFB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rFC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rFD">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rFE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rFF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rFG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rFH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rFI">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rFJ">0</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>G</td>
+                                    <td>
+                                        <p id="rGA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rGB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rGC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rGD">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rGE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rGF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rGG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rGH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rGI">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rGJ">0</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>H</td>
+                                    <td>
+                                        <p id="rHA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rHB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rHC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rHD">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rHE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rHF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rHG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rHH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rHI">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rHJ">0</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>I</td>
+                                    <td>
+                                        <p id="rIA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rIB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rIC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rID">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rIE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rIF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rIG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rIH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rII">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rIJ">0</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>J</td>
+                                    <td>
+                                        <p id="rJA">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rJB">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rJC">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rJD">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rJE">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rJF">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rJG">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rJH">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rJI">0</p>
+                                    </td>
+                                    <td>
+                                        <p id="rJJ">0</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--    原图展示面板
+            <div class="mdui-panel-item">
+                <div class="mdui-panel-item-header">原图展示面板</div>
+                <div class="mdui-panel-item-body">
+                    <canvas id="graph" class="mdui-container-fluid" />
+                </div>
+            </div>
+            最短路径展示面板
+            <div class="mdui-panel-item">
+                <div class="mdui-panel-item-header">最短路径展示面板</div>
+                <div class="mdui-panel-item-body">
+                    <canvas id="resultGraph" class="mdui-container-fluid" />
+                </div>
+            </div> -->
+        </div>
+
+    </div>
+    <!-- JavaScript -->
+    <script src="/MDUI/js/mdui.min.js"></script>
+    <script src='/jquery-3.6.4.min.js'></script>
+    <script src="floyd.js"></script>
+    <script src="common.js"></script>
+</body>
+
+</html>
