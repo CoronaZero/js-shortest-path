@@ -68,12 +68,26 @@ function setRandomNum() {
     resetList();
     // 遍历并填充单元格
     for (let i = 0; i < tlist.length; i++) {
-        $("#" + tlist[i]).val(randomNum(-1, 20).toString());
+        // 判断是否为弗洛伊德算法
+        if (defaultNum == Infinity) {
+            // 弗洛伊德算法填充逻辑
+            let rand = randomNum(0, 20);
+            if (rand < 1) {
+                $("#" + tlist[i]).val(Infinity);
+            } else {
+                $("#" + tlist[i]).val(rand);
+            }
+        } else {
+            // 迪杰斯特拉算法随机填充逻辑
+            $("#" + tlist[i]).val(randomNum(0, 20).toString());
+        }
     }
     // 重置AA,BB,CC...单元格的数值
     lockTextBox();
     // 更新nlist数组
     getMatrixData();
+    // 重新进行计算并展示
+    calculate();
 }
 
 // 锁定AA,BB,CC...单元格并将数字置为defaultNum
@@ -96,6 +110,7 @@ $("input").not("#randNum").change(function () {
     //$("#" + $(this).attr("id")[1] + $(this).attr("id")[0]).val($(this).val());
     // 获取矩阵内所有数据并存入数组nlist
     getMatrixData();
+    calculate();
 });
 
 //生成从minNum到maxNum的随机数
@@ -125,7 +140,7 @@ function getMatrixSize() {
     // 判断每行位置存在有效数据且最远的单元格
     for (let i = 0; i < 10; i++) {
         for (let j = 9; j >= 0; j--) {
-            if (nlist[i][j] <= 0) {
+            if (nlist[i][j] == Infinity || nlist[i][j] <= 0) {
                 continue;
             } else {
                 rmax[i] = j;
@@ -136,7 +151,7 @@ function getMatrixSize() {
     // 判断每列位置存在有效数据且最远的单元格
     for (let i = 0; i < 10; i++) {
         for (let j = 9; j >= 0; j--) {
-            if (nlist[j][i] <= 0) {
+            if (nlist[i][j] == Infinity || nlist[i][j] <= 0) {
                 continue;
             } else {
                 cmax[i] = j;
@@ -165,9 +180,9 @@ function getMatrixData() {
         for (let j = 0; j < 10; j++) {
 
             // 判断当前单元格是否为数字
-            if (typeof $("#" + llist[i * 10 + j]).val() == 'number') {
+            if (typeof ($("#" + llist[i][j]).val()) == 'number' || ($("#" + llist[i][j]).val()) != Infinity) {
                 // 是，则直接写入nlist
-                nlist[i][j] = $("#" + llist[i * 10 + j]).val();
+                nlist[i][j] = Number($("#" + llist[i][j]).val());
             } else {
                 // 不是，则写入defaultNum
                 nlist[i][j] = defaultNum;
@@ -183,19 +198,7 @@ function matrixSizeSnackbar() {
     });
 }
 
-// 当下拉选择框内容发生变动时
-$("select").change(function () {
-    // 判断两个下拉选择框中的值是否一致，如果一致则弹出警告
-    if ($("#from").val() == $("#to").val()) {
-        alert("错误：需要计算的两点不能为同一点，将尝试随机取点！");
-    } else {
-        // 若不一致，则随机取点
-        setRandomPoint();
-    }
-    // 设置全局变量from、to的值
-    from = $("#from").val();
-    to = $("#to").val();
-});
+
 
 // 下拉选择框随机取点
 function setRandomPoint() {
@@ -220,6 +223,7 @@ function setRandomPoint() {
         from = $("#from").val();
         to = $("#to").val();
     }
+    calculate();
 }
 
 // 重载右上角一言
@@ -237,20 +241,5 @@ $("#hitokoto").click(function () {
     reloadHitokoto();
 });
 
-// 计算结果展示
-function showResult() {
-    // 将rlist中的数据显示于结果面板
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            // 若某一元素为无穷大
-            if (rlist[i][j] == Infinity) {
-                // 将内容设置为INF
-                $("#r" + llist[i][j]).text("INF");
-            } else {
-                // 将内容设置为对应数字
-                $("#r" + llist[i][j]).text(rlist[i][j]);
-            }
-        }
-    }
-}
+
 
