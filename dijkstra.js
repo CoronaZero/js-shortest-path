@@ -15,22 +15,22 @@ function calculate() {
     let dist = []
     let visited = []
     let src
-    let graph=[]
+    const graph = new Array(getMatrixSize()).fill([])
 
     // 初始化graph列表
-    for(let i=0;i<getMatrixSize();i++){
-        for(let j=0;j<getMatrixSize();j++){
-            graph[i][j]=nlist[i][j];
+    for (let i = 0; i < getMatrixSize(); i++) {
+        for (let j = 0; j < getMatrixSize(); j++) {
+            graph[i][j] = nlist[i][j];
         }
     }
 
     // 初始化src
-    for(let i=0;i<10;i++){
-        if(clist[i]==$("#from").val()){
-            src=i;
+    for (let i = 0; i < 10; i++) {
+        if (clist[i] == $("#from").val()) {
+            src = i;
         }
     }
-    
+
     const length = graph.length
     const INF = Number.MAX_SAFE_INTEGER
 
@@ -78,20 +78,40 @@ function calculate() {
     }
 
     // 重置结果面板中的内容
-    for(let i=0;i<10;i++){
-        $("#r"+clist[i]).text("INF");
+    for (let j = 0; j < 10; j++) {
+        $("#r" + clist[j]).text("INF");
     }
     // 将结果展示于结果面板
-    for(let i=0;i<dist.length;i++){
-        $("#r"+clist[i]).text(dist[i]);
+    for (let j = 0; j < dist.length; j++) {
+        $("#r" + clist[j]).text(dist[j]);
     }
 }
 
 // 若起点发生变动
-$("#from").change(function(){
+$("#from").change(function () {
     // 修改结果面板的起点值
     $("#initpoint").text($("#from").val());
     // 重新计算
     getMatrixData();
     calculate();
 })
+
+// 下拉选择框随机取点
+function setRandomPoint() {
+    // 判断矩阵大小是否小于等于1
+    if (getMatrixSize() <= 1) {
+        // 无法给出随机两点，发出警告提示
+        alert("当前矩阵大小小于2，请填写矩阵后使用此功能");
+    } else {
+        let r
+        r=randomNum(0, getMatrixSize() - 1);
+        // 设定from下拉选择框内的值
+        $("#from").val(clist[r]);
+        // 设定下方结果列表中首行的起点
+        $("#initpoint").text(clist[r])
+        // 设置全局变量from、to的值
+        from = $("#from").val();
+
+    }
+    calculate();
+}

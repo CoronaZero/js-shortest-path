@@ -4,14 +4,14 @@ llist：前十个字母排列组合后的列表
 nlist：获取单元格内所有数据组合而成的二维数组
 rlist：计算结果二维数组
 from：起点
-to：终点
+
 */
 var clist = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 var llist = [[], [], [], [], [], [], [], [], [], []];
 var nlist = [[], [], [], [], [], [], [], [], [], []];
 var rlist = [[], [], [], [], [], [], [], [], [], []];
 var from = "A";
-var to = "B";
+
 
 // 文档加载完成后执行
 $(document).ready(function () {
@@ -199,32 +199,6 @@ function matrixSizeSnackbar() {
 }
 
 
-
-// 下拉选择框随机取点
-function setRandomPoint() {
-    // 判断矩阵大小是否小于等于1
-    if (getMatrixSize() <= 1) {
-        // 无法给出随机两点，发出警告提示
-        alert("当前矩阵大小小于2，请填写矩阵后使用此功能");
-    } else {
-        let ra, rb;
-        // 死循环，直到取不同的两点退出
-        while (true) {
-            ra = randomNum(0, getMatrixSize() - 1);
-            rb = randomNum(0, getMatrixSize() - 1);
-            if (ra != rb) {
-                break;
-            }
-        }
-        // 设置下拉选择框的值
-        $("#from").val(clist[ra]);
-        $("#to").val(clist[rb]);
-        // 设置全局变量from、to的值
-        from = $("#from").val();
-        to = $("#to").val();
-    }
-    calculate();
-}
 
 // 重载右上角一言
 function reloadHitokoto() {
