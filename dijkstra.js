@@ -91,6 +91,7 @@ function calculate() {
 $("#from").change(function () {
     // 修改结果面板的起点值
     $("#initpoint").text($("#from").val());
+    from=$("#from").val();
     // 重新计算
     getMatrixData();
     calculate();
